@@ -21,11 +21,13 @@ export async function uploadRoutes(app: FastifyInstance) {
                 fileSize: 5_242_880 /* 5mb. _ nao modifica o numeral */
             }
         })
+        //Esse 5mb nao impede o usuario de colocar coisa maior, ele só corta o arquivo no meio. Por exemplo, so upa 5mb da imagem (da pra ajeitar isso dps).
 
         if (!upload) {
             return res.status(400).send()
         }
 
+        //todo arquivo tem um mimetype. E esse método testa o mimetype de acordo com as condições do regex abaixo
         const mimeTypeRegex = /^(image|video)\/[a-zA-Z]+/
         const isValidFileFormat = mimeTypeRegex.test(upload.mimetype)
 
@@ -33,6 +35,7 @@ export async function uploadRoutes(app: FastifyInstance) {
             return res.status(400).send()
         }
 
+        //nome pra salvar no banco. Se salvar com o nome do arquivo, dois arquivos iguais podem dar zebra
         const fileId = randomUUID()
         const extension = extname(upload.filename)
 
@@ -43,7 +46,7 @@ export async function uploadRoutes(app: FastifyInstance) {
         o resolve normaliza o nome das rotas, ja que em cada OS as rotas dos arquivos sao escritas de forma diferente. __dirname é uma variavel global
         do Node que é o local de onde o arquivo atual (no caso upload.ts) está
         */
-        const writeStream = createWriteStream(resolve(__dirname, '../../uploads/', fileName))
+        const writeStream = createWriteStream(resolve(__dirname, '../../uploads/', fileName)) //onde vai salvar o arquivo
 
         await pump(upload.file, writeStream)
 
@@ -57,7 +60,7 @@ export async function uploadRoutes(app: FastifyInstance) {
         Para poder acessar esses arquivos aqui nesse projeto, utiliza-se a biblioteca @fastify/static
         */
 
-        return fileUrl
+        return { fileUrl }
 
     })
 }
