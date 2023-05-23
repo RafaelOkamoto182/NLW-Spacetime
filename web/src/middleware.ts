@@ -25,7 +25,7 @@ export function middleware(request: NextRequest) {
 
 }
 
-/* Rotas que serao interceptadas por esse middleware */
+/* Rotas que serao interceptadas por esse middleware. Tipo um trigger do middleware */
 export const config = {
     matcher: '/memories/:path*'
 }

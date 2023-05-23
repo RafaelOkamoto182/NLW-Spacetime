@@ -13,8 +13,8 @@ const app = fastify()
 app.register(multipart)
 
 app.register(require('@fastify/static'), {
-    root: resolve(__dirname, '../uploads'),
-    prefix: '/uploads' //"http://localhost:3333/uploads/dmcjd...." 
+    root: resolve(__dirname, '../uploads'), //pasta onde estao os arquivos
+    prefix: '/uploads' //"http://localhost:3333/uploads/dmcjd.... é o que fica na url" 
 })
 
 app.register(cors, {

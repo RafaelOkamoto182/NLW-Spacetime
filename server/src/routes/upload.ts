@@ -57,7 +57,7 @@ export async function uploadRoutes(app: FastifyInstance) {
         Para poder acessar esses arquivos aqui nesse projeto, utiliza-se a biblioteca @fastify/static
         */
 
-        return fileUrl
+        return { fileUrl }
 
     })
 }

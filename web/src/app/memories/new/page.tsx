@@ -36,7 +36,10 @@ export default function NewMemory() {
                         className="flex items-center gap-1.5 text-sm text-gray-200 hover:text-gray-100"
                     >
 
-                        {/* O input checkbox também é bem chato de estilizar. por isso instala o plugin @tailwindcss/forms. (Tem coisa no tailwind.config) */}
+                        {/* 
+                        O input checkbox também é bem chato de estilizar. por isso instala o plugin @tailwindcss/forms. Ele substitui os elementos padroes pra ser mais facil estilizar 
+                        (Tem coisa no tailwind.config) 
+                        */}
                         <input
                             type="checkbox"
                             name="isPublic"
