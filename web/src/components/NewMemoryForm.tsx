@@ -4,47 +4,59 @@ import { Camera } from "lucide-react";
 import { MediaPicker } from "./MediaPicker";
 import { api } from "@/lib/api";
 import { FormEvent } from "react";
+import Cookie from 'js-cookie'
+import { useRouter } from "next/navigation";
 
 
 export function NewMemoryForm() {
 
-    function handleCreateMemory(event: FormEvent<HTMLFormElement>) {
+    //const cookie = cookies.has('token') Essa funcao nao pode ser usada dentro de 'use client'. Ela é uma funçao feita na camada do BFF (backend for frontend)
+    //como o 'use client' exclui essa camada, precisa acessar os cookies de um jeito diferente.
+    //nos casos de 'use client'utiliza-se um metodo global document.cookie. O unico chato desse metodo é que tem que dar uma manipulada nas strings com regex.
+    //Aqui utilizou a lib js-cookie, que facilita manipular cookies no geral
+
+    const router = useRouter()
+
+
+    async function handleCreateMemory(event: FormEvent<HTMLFormElement>) {
+
         event.preventDefault()
 
         const formData = new FormData(event.currentTarget)
 
         console.log(Array.from(formData.entries()))
 
-        /*             const fileToUpload = formData.get('coverUrl')
-        
-                    let coverUrl = ''
-        
-                    if (fileToUpload) {
-                        const uploadFormData = new FormData()
-                        uploadFormData.set('file', fileToUpload)
-        
-                        const uploadResponse = await api.post('/upload', uploadFormData)
-        
-                        coverUrl = uploadResponse.data.fileUrl
-                    }
-        
-                    const token = Cookie.get('token')
-        
-                    await api.post(
-                        '/memories',
-                        {
-                            coverUrl,
-                            content: formData.get('content'),
-                            isPublic: formData.get('isPublic'),
-                        },
-                        {
-                            headers: {
-                                Authorization: `Bearer ${token}`,
-                            },
-                        },
-                    )
-        
-                    router.push('/') */
+        const fileToUpload = formData.get('coverUrl')
+
+        let coverUrl = ''
+
+        //enviando o arquivo pra rota do backend
+        if (fileToUpload) {
+            const uploadFormData = new FormData()  //Cria um objeto no formado de multipart-form-data, que é o formato que selecionamos pra upload no backend (por causa de arquivos)
+            uploadFormData.set('file', fileToUpload)
+
+            const uploadResponse = await api.post('/upload', uploadFormData)
+
+            coverUrl = uploadResponse.data.fileUrl
+        }
+
+        const token = Cookie.get('token')
+
+        await api.post(
+            '/memories',
+            {
+                coverUrl,
+                content: formData.get('content'),
+                isPublic: formData.get('isPublic'),
+            },
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            },
+        )
+
+        router.push('/')
     }
 
 
