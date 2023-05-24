@@ -47,7 +47,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </div>
 
           {/* Right column */}
-          <div className="flex flex-col p-16 bg-[url(../assets/bg-stars.svg)] bg-cover">
+          <div className="flex max-h-screen flex-col overflow-y-scroll bg-[url(../assets/bg-stars.svg)] bg-cover">
+            {/* overflow-y-scroll e o max-h-screen é o que faz só a parte do bloco atual (da direita) se mova com o scroll*/}
 
             {children} {/* Children é onde vai aparecer o conteudo ESPECIFICO de cada página */}
 
